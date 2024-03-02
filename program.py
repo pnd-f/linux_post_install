@@ -136,7 +136,7 @@ class ProgramMap:
         else:
             print(f'\n{FStyle.RED}SOMeTHING WENT WRONG!!!{FStyle.RESET_ALL}\n')
 
-    # TODO add remuve/purge
+    # TODO add remove/purge
 
     @staticmethod
     def apt_autoremove():
@@ -182,7 +182,9 @@ sudo apt-get autoclean -y'''
     sudo apt-get update
     sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
     sudo usermod -aG docker $USER
-    echo -e -e '\033[33m                            введите ctrl + D'
+    # check 
+    echo -e '\004'
+    # echo -e -e '\033[33m                            введите ctrl + D'
     newgrp docker
     '''  #
 
