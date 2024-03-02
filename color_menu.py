@@ -175,7 +175,7 @@ class Menu:
             stdscr.refresh()
 
         curses.use_default_colors()
-        # curses.curs_set(0)  # hide the cursor
+        curses.curs_set(0)  # hide the cursor
 
         self.colors.init_color_pairs(stdscr)
 
