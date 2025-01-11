@@ -2,6 +2,8 @@ import json
 import os
 import subprocess
 
+from programs.curl import Curl
+from programs.sublime import Sublime
 from color_menu import FStyle
 from download_with_progres import AnimationDownloader
 from settings import APPS_PATH
@@ -37,10 +39,6 @@ class ProgramMap:
         @staticmethod
         def get_slack_url() -> str:
             return 'https://downloads.slack-edge.com/releases/linux/4.35.131/prod/x64/slack-desktop-4.35.131-amd64.deb'
-
-        @staticmethod
-        def get_sublime_url() -> str:
-            return 'https://download.sublimetext.com/sublime-text_build-3211_amd64.deb'
 
         @staticmethod
         def get_viber_url() -> str:
@@ -94,6 +92,7 @@ class ProgramMap:
                     versions.append(version)
         return versions
 
+    # TODO remove after moving to class
     @staticmethod
     def check_version(command: str) -> list[str]:
         try:
@@ -111,6 +110,7 @@ class ProgramMap:
         result_atr = result.split()
         return result_atr
 
+    # Todo remove
     @staticmethod
     def install(command: str, name: str) -> None:
         command = command.format(name)
@@ -149,17 +149,18 @@ class ProgramMap:
     @staticmethod
     def finishing_touches():
         commands = '''sudo apt update -y
-sudo apt upgrade -y
-# восстановление зависимостей
-sudo apt install -y -f
-# удаление лишних пакетов, чистка кеша APT
-sudo apt autoremove -y
-sudo apt-get autoclean -y'''
+            sudo apt upgrade -y
+            # восстановление зависимостей
+            sudo apt install -y -f
+            # удаление лишних пакетов, чистка кеша APT
+            sudo apt autoremove -y
+            sudo apt-get autoclean -y'''
         try:
             subprocess.run(args=commands, shell=True)
         except Exception as e:
             print(e)
 
+    # TODO remove
     dpkg_install_command = 'sudo dpkg -i apps/{}'
     unpack_telegram_command = 'sudo apt install xz-utils -y && tar -xf apps/{} -C ~/apps'
     install_pycharm_p_command = ('tar -xf {path}/{file_name} -C ~/apps && '
@@ -186,7 +187,7 @@ sudo apt-get autoclean -y'''
     echo -e '\004'
     # echo -e -e '\033[33m                            введите ctrl + D'
     newgrp docker
-    '''  #
+    '''
 
     program_map = {  # TODO redo it to dict[str, CLASS]
         'code': {
@@ -294,21 +295,7 @@ sudo apt-get autoclean -y'''
                 'url': UrlMap.get_slack_url(),
             },
         },
-        'sublime-text': {
-            'check_version': {
-                'command': 'subl -v',
-                'func': check_version,
-                'result_indices': [3]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_sublime_url(),
-            },
-        },
+        'sublime-text': Sublime,
         'teams': {  # TODO ??? the development of the package has been abandoned
             'check_version': {
                 'command': 'dpkg -l | grep teams',
@@ -368,7 +355,7 @@ sudo apt-get autoclean -y'''
                 'url': UrlMap.get_zoom_url(),
             },
         },
-        'tsetup': {
+        'telegram': {
             'check_version': {  # TODO find a way
                 'command': 'echo unknown',
                 'func': check_version,
@@ -441,20 +428,7 @@ sudo apt-get autoclean -y'''
                 'downloadable': False,
             },
         },
-        'curl': {
-            'check_version': {
-                'command': 'curl -V',
-                'func': check_version,
-                'result_indices': [1, 2],
-            },
-            'install': {
-                'command': apt_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-            },
-        },
+        'curl': Curl,
         'docker': {
             'check_version': {
                 'command': 'docker --version',
@@ -522,22 +496,22 @@ class ProgramState:
     file_name: str
 
     def __init__(self, program_name: str):
-        self.program_name = program_name
-        self.program_map = ProgramMap.program_map[self.program_name]
+        program_class = ProgramMap.program_map[program_name]
+        self.program = program_class(program_name)
 
-        check_version = self.program_map['check_version']
-        self.result_indices = check_version['result_indices']
-        self.check_func = check_version['func']
-        self.check_command = check_version['command']
-        download = self.program_map['download']
-
-        self.downloadable = download['downloadable']
-        if self.downloadable:
-            self.url = download['url']
-
-        install = self.program_map['install']
-        self.installer = install['func']
-        self.install_command = install['command']
+        # check_version = self.program_map['check_version']
+        # self.result_indices = check_version['result_indices']
+        # self.check_func = check_version['func']
+        # self.check_command = check_version['command']
+        # download = self.program_map['download']
+        #
+        # self.downloadable = download['downloadable']
+        # if self.downloadable:
+        #     self.url = download['url']
+        #
+        # install = self.program_map['install']
+        # self.installer = install['func']
+        # self.install_command = install['command']
 
         self.is_need_recheck_install = True
         self.is_need_recheck_download = True
@@ -545,7 +519,7 @@ class ProgramState:
     def is_downloaded(self, files: list[str]) -> bool:
         if self.is_need_recheck_download:
             for file_name in files:
-                if file_name.startswith(self.program_name):
+                if file_name.startswith(self.program.title):
                     self.__is_downloaded = True
                     self.file_name = file_name
                     break
@@ -561,17 +535,18 @@ class ProgramState:
         return self.__is_installed
 
     def download_and_install(self):
-        if self.downloadable:
+        if self.program.downloadable:
             if not self.__is_downloaded and not self.__is_installed:
-                downloader = AnimationDownloader(self.url)
+                downloader = AnimationDownloader(self.program.url)
                 file_name = downloader.download_with_animation()
-                self.installer(self.install_command, file_name)
+                self.program.install(file_name)
             else:
                 if not self.__is_installed:
-                    self.installer(self.install_command, self.file_name)
+                    self.program.install(self.file_name)
         else:
-            if not self.__is_installed:
-                self.installer(self.install_command, self.program_name)
+            # if it is not file -> apt
+            if not self.__is_installed and hasattr(self.program, 'apt_title'):
+                self.program.install(self.program.apt_title)
         # reset the condition for the rechecking
         self.is_need_recheck_download = True
         self.is_need_recheck_install = True
@@ -583,14 +558,17 @@ class ProgramState:
         return self.__version
 
     def __set_version_and_is_installed(self) -> None:
-        version_list = self.check_func(self.check_command) if self.check_command else self.check_func()
-        version = ' '.join([version_list[s] for s in self.result_indices]) if version_list else ''
+        # todo   # version_list = self.check_func(self.check_command) if self.check_command else self.check_func()
+        version_list = self.program.check_version()
+        version = ' '.join([version_list[s] for s in self.program.result_indices]) if version_list else ''
         if version and not self.__is_installed:
+            # TODO recheck
             if version != 'unknown':
                 self.__is_installed = True
         else:
             self.__is_installed = False
         self.__version = version
 
+
     def __repr__(self):
-        return f'{self.program_name} -> {self.__class__} - {id(self)}'
+        return f'{self.program} -> {self.__class__} - {id(self)}'

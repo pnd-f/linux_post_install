@@ -58,13 +58,14 @@ def re_run():
         print(e)
 
 
-def check_python_version() -> None:
+def check_and_install_python_version() -> None:
     current_version = get_python_version()
     if not is_valid_version(current_version):
         if not is_exists_necessary_version():
             suggest_install_python()
             install_python()
         re_run()
+        exit(0)
     else:
         print('something went wrong... it should work! but...')
-    exit(0)
+        exit(1)
