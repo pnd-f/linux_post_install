@@ -1,10 +1,10 @@
 APPS_PATH = 'apps'
 GENERAL_COMMANDS = ['select all', 'exit']
 DEB_LIST = [
-    # 'code',
-    # 'dbeaver',
-    # 'google',
-    # 'Insomnia',
+    'code',
+    'dbeaver',
+    'chrome',
+    'Insomnia',
     # 'microsoft-edge',
     # 'mongodb-compass',
 #     'slack-desktop',

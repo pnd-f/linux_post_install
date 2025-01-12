@@ -1,11 +1,11 @@
 from programs.common import CommonProgram
 
 
-class Sublime(CommonProgram):
-    check_version_cmd = 'subl -v'
-    result_indices = [3]
+class DBeaver(CommonProgram):
+    check_version_cmd = 'dbeaver -version -nosplash'
+    result_indices = [1]
     downloadable = True
-    url = 'https://download.sublimetext.com/sublime-text_build-4189_amd64.debb'
+    url = 'https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb'
 
     def __init__(self, title: str):
         self.title = title

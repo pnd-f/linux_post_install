@@ -1,11 +1,11 @@
 from programs.common import CommonProgram
 
 
-class Sublime(CommonProgram):
-    check_version_cmd = 'subl -v'
-    result_indices = [3]
+class Viber(CommonProgram):
+    check_version_cmd = 'dpkg -l | grep viber'
+    result_indices = [2, 3]
     downloadable = True
-    url = 'https://download.sublimetext.com/sublime-text_build-4189_amd64.debb'
+    url = 'https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb'
 
     def __init__(self, title: str):
         self.title = title

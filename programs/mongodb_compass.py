@@ -1,11 +1,11 @@
 from programs.common import CommonProgram
 
 
-class Sublime(CommonProgram):
-    check_version_cmd = 'subl -v'
-    result_indices = [3]
+class MongodbCompass(CommonProgram):
+    check_version_cmd = 'dpkg -l | grep mongodb-compass'
+    result_indices = [2, 3]
     downloadable = True
-    url = 'https://download.sublimetext.com/sublime-text_build-4189_amd64.debb'
+    url = 'https://downloads.mongodb.com/compass/mongodb-compass_1.41.0_amd64.deb'
 
     def __init__(self, title: str):
         self.title = title

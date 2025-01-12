@@ -1,11 +1,12 @@
 from programs.common import CommonProgram
 
 
-class Sublime(CommonProgram):
-    check_version_cmd = 'subl -v'
-    result_indices = [3]
-    downloadable = True
-    url = 'https://download.sublimetext.com/sublime-text_build-4189_amd64.debb'
+class Teams(CommonProgram):
+    # TODO not for ubuntu, probably other OS
+    check_version_cmd = 'dpkg -l | grep teams'
+    result_indices = [2, 3]
+    downloadable = False
+    url = ''
 
     def __init__(self, title: str):
         self.title = title

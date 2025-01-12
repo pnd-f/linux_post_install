@@ -1,11 +1,11 @@
 from programs.common import CommonProgram
 
 
-class Sublime(CommonProgram):
-    check_version_cmd = 'subl -v'
-    result_indices = [3]
+class Chrome(CommonProgram):
+    check_version_cmd = 'google-chrome --version'
+    result_indices = [2]
     downloadable = True
-    url = 'https://download.sublimetext.com/sublime-text_build-4189_amd64.debb'
+    url = 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
 
     def __init__(self, title: str):
         self.title = title

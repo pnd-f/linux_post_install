@@ -2,48 +2,24 @@ import json
 import os
 import subprocess
 
+from programs.chrome import Chrome
 from programs.curl import Curl
+from programs.dbeaver import DBeaver
+from programs.insomnia import Insomnia
+from programs.microsoft_edge import MicrosoftEdge
+from programs.mongodb_compass import MongodbCompass
+from programs.slack_desktop import Slack
 from programs.sublime import Sublime
 from color_menu import FStyle
 from download_with_progres import AnimationDownloader
+from programs.viber import Viber
+from programs.vscode import Code
 from settings import APPS_PATH
 
 
 class ProgramMap:
     class UrlMap:
         # put a logic to find the latest version
-        @staticmethod
-        def get_vscode_url() -> str:
-            return 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
-
-        @staticmethod
-        def get_dbeaver_url() -> str:
-            return 'https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb'
-
-        @staticmethod
-        def get_google_url() -> str:
-            return 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
-
-        @staticmethod
-        def get_insomnia_url() -> str:
-            return 'https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app&source=website'
-
-        @staticmethod
-        def get_edge_url() -> str:
-            return 'https://go.microsoft.com/fwlink?linkid=2149051&brand=M102'
-
-        @staticmethod
-        def get_compas_url() -> str:
-            return 'https://downloads.mongodb.com/compass/mongodb-compass_1.41.0_amd64.deb'
-
-        @staticmethod
-        def get_slack_url() -> str:
-            return 'https://downloads.slack-edge.com/releases/linux/4.35.131/prod/x64/slack-desktop-4.35.131-amd64.deb'
-
-        @staticmethod
-        def get_viber_url() -> str:
-            return 'https://download.cdn.viber.com/cdn/desktop/Linux/viber.deb'
-
         @staticmethod
         def get_virtualbox_url() -> str:
             return ('https://download.virtualbox.org/virtualbox/7.0.12/'
@@ -189,142 +165,16 @@ class ProgramMap:
     newgrp docker
     '''
 
-    program_map = {  # TODO redo it to dict[str, CLASS]
-        'code': {
-            'check_version': {
-                'command': 'code -v',
-                'func': check_version,
-                'result_indices': [0, 2]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_vscode_url()
-            }
-        },
-        'dbeaver': {
-            'check_version': {
-                'command': 'dbeaver -version -nosplash',
-                'func': check_version,
-                'result_indices': [1],
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_dbeaver_url()
-            },
-        },
-        'google': {
-            'check_version': {
-                'command': 'google-chrome --version',
-                'func': check_version,
-                'result_indices': [2],
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_google_url(),
-            },
-        },
-        'Insomnia': {
-            'check_version': {
-                'command': 'dpkg -l | grep insomnia',
-                'func': check_version,
-                'result_indices': [2, 3]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_insomnia_url(),
-            },
-        },
-        'microsoft-edge': {
-            'check_version': {
-                'command': 'microsoft-edge --version',
-                'func': check_version,
-                'result_indices': [2]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_edge_url(),
-            },
-        },
-        'mongodb-compass': {
-            'check_version': {
-                'command': 'dpkg -l | grep mongodb-compass',
-                'func': check_version,
-                'result_indices': [2, 3]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_compas_url(),
-            },
-        },
-        'slack-desktop': {
-            'check_version': {
-                'command': 'slack -v',
-                'func': check_version,
-                'result_indices': [0]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_slack_url(),
-            },
-        },
+    program_map = {
+        'code': Code,
+        'dbeaver': DBeaver,
+        'chrome': Chrome,
+        'Insomnia': Insomnia,
+        'microsoft-edge': MicrosoftEdge,
+        'mongodb-compass': MongodbCompass,
+        'slack-desktop': Slack,
         'sublime-text': Sublime,
-        'teams': {  # TODO ??? the development of the package has been abandoned
-            'check_version': {
-                'command': 'dpkg -l | grep teams',
-                'func': check_version,
-                'result_indices': [2, 3]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-                # 'url': UrlMap.get_mock()
-            },
-        },
-        'viber': {
-            'check_version': {
-                'command': 'dpkg -l | grep viber',
-                'func': check_version,
-                'result_indices': [2, 3]},
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_viber_url()
-            },
-        },
+        'viber': Viber,
         'virtualbox': {
             'check_version': {
                 'command': 'dpkg -l | grep virtualbox',

@@ -1,11 +1,11 @@
 from programs.common import CommonProgram
 
 
-class Sublime(CommonProgram):
-    check_version_cmd = 'subl -v'
-    result_indices = [3]
+class MicrosoftEdge(CommonProgram):
+    check_version_cmd = 'microsoft-edge --version'
+    result_indices = [2]
     downloadable = True
-    url = 'https://download.sublimetext.com/sublime-text_build-4189_amd64.debb'
+    url = 'https://go.microsoft.com/fwlink?linkid=2149051&brand=M102'
 
     def __init__(self, title: str):
         self.title = title
