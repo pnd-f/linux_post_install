@@ -6,10 +6,7 @@ class MicrosoftEdge(CommonProgram):
     result_indices = [2]
     downloadable = True
     url = 'https://go.microsoft.com/fwlink?linkid=2149051&brand=M102'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'MicrosoftEdge'
 
     @property
     def install_cmd(self):

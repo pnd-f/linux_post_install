@@ -22,7 +22,11 @@ class CommonProgram(ABC):
 
     def __init__(self):
         # fields that must be redefined
-        fields_for_check = {'title', 'check_version_cmd', 'result_indices'}
+        fields_for_check = {
+            'title',
+            'check_version_cmd',
+            'result_indices',
+        }
         for field in fields_for_check:
             if not getattr(self, field):
                 raise NotImplementedError(f"Children class must redefine {field}")
@@ -43,17 +47,15 @@ class CommonProgram(ABC):
         result_atr = result.split()
         return result_atr
 
-    def install(self, p: str) -> None:
+    def install(self, arg: str) -> None:
         """
         Installs a package or a file.
-
         Args:
-            p (str): The name of the file or the apt package title.
-
+            arg (str): The name of the file or the apt package title.
         Returns:
             None
         """
-        command = self.install_cmd.format(p)
+        command = self.install_cmd.format(arg)
         result = subprocess.run(command, shell=True)
         if result.returncode == 0:
             print(f'\n{FStyle.GREEN}SUCCESSFUL!!!{FStyle.RESET_ALL}\n')

@@ -6,10 +6,7 @@ class Sublime(CommonProgram):
     result_indices = [3]
     downloadable = True
     url = 'https://download.sublimetext.com/sublime-text_build-4189_amd64.debb'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'Sublime'
 
     @property
     def install_cmd(self):

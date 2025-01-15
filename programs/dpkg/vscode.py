@@ -6,10 +6,7 @@ class Code(CommonProgram):
     result_indices = [0, 2]
     downloadable = True
     url = 'https://code.visualstudio.com/sha/download?build=stable&os=linux-deb-x64'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'VS Code'
 
     @property
     def install_cmd(self):

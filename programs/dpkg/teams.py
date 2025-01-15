@@ -7,10 +7,7 @@ class Teams(CommonProgram):
     result_indices = [2, 3]
     downloadable = False
     url = ''
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'Teams'
 
     @property
     def install_cmd(self):

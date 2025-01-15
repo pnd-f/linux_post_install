@@ -6,10 +6,7 @@ class Chrome(CommonProgram):
     result_indices = [2]
     downloadable = True
     url = 'https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'Chrome'
 
     @property
     def install_cmd(self):

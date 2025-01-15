@@ -3,8 +3,7 @@ import re
 import subprocess
 
 from color_menu import Menu, ColorMenu, FStyle
-from program_state import ProgramState, ProgramMap
-from programs.common import CommonProgram
+from program_state import ProgramState
 from settings import APPS_PATH, DEB_LIST, GENERAL_COMMANDS, APT_LIST, ARCHIVE_LIST
 
 

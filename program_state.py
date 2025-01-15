@@ -2,37 +2,32 @@ import json
 import os
 import subprocess
 
-from programs.chrome import Chrome
-from programs.curl import Curl
-from programs.dbeaver import DBeaver
-from programs.insomnia import Insomnia
-from programs.microsoft_edge import MicrosoftEdge
-from programs.mongodb_compass import MongodbCompass
-from programs.slack_desktop import Slack
-from programs.sublime import Sublime
+from programs.apt.git import Git
+from programs.apt.htop import Htop
+from programs.apt.python3pip import Python3Pip
+from programs.apt.virtualenv import Virtualenv
+from programs.apt.xz_utils import XzUtils
+from programs.dpkg.chrome import Chrome
+from programs.apt.curl import Curl
+from programs.dpkg.dbeaver import DBeaver
+from programs.dpkg.insomnia import Insomnia
+from programs.dpkg.microsoft_edge import MicrosoftEdge
+from programs.dpkg.mongodb_compass import MongodbCompass
+from programs.dpkg.slack_desktop import Slack
+from programs.dpkg.sublime import Sublime
 from color_menu import FStyle
 from download_with_progres import AnimationDownloader
-from programs.viber import Viber
-from programs.vscode import Code
+from programs.dpkg.viber import Viber
+from programs.dpkg.virtualbox import Virtualbox
+from programs.dpkg.vscode import Code
+from programs.dpkg.zoom import Zoom
+from programs.others.docker import Docker
 from settings import APPS_PATH
 
 
 class ProgramMap:
     class UrlMap:
         # put a logic to find the latest version
-        @staticmethod
-        def get_virtualbox_url() -> str:
-            return ('https://download.virtualbox.org/virtualbox/7.0.12/'
-                    'virtualbox-7.0_7.0.12-159484~Ubuntu~jammy_amd64.deb')
-
-        @staticmethod
-        def get_zoom_url() -> str:
-            return 'https://zoom.us/client/5.17.1.1840/zoom_amd64.deb'
-
-        @staticmethod
-        def get_telegram_url() -> str:
-            return 'https://telegram.org/dl/desktop/linux'
-
         @staticmethod
         def get_pycharm_professional() -> str:
             return 'https://download.jetbrains.com/product?code=PC&latest&distribution=linux'
@@ -41,9 +36,6 @@ class ProgramMap:
         def get_pycharm_community() -> str:
             return 'https://download.jetbrains.com/product?code=PCC&latest&distribution=linux'
 
-        @staticmethod
-        def get_mock() -> str:
-            return 'mock'
 
     @staticmethod
     def get_pycharm_version(pycharm_type: str) -> list[str]:
@@ -137,33 +129,11 @@ class ProgramMap:
             print(e)
 
     # TODO remove
-    dpkg_install_command = 'sudo dpkg -i apps/{}'
     unpack_telegram_command = 'sudo apt install xz-utils -y && tar -xf apps/{} -C ~/apps'
     install_pycharm_p_command = ('tar -xf {path}/{file_name} -C ~/apps && '
                                  'sudo ln -s ~/apps/{folder_name}/bin/pycharm.sh /usr/local/bin/charm')
     install_pycharm_c_command = ('tar -xf {path}/{file_name} -C ~/apps && '
                                  'sudo ln -s ~/apps/{folder_name}/bin/pycharm.sh /usr/local/bin/pycharm')
-    apt_install_command = 'sudo apt install {} -y'
-    install_docker_command = '''# Add Docker's official GPG key:
-    sudo apt-get update
-    sudo apt-get install ca-certificates curl
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
-
-    # Add the repository to Apt sources:
-    echo \
-      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-      $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-      sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-    sudo apt-get update
-    sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-    sudo usermod -aG docker $USER
-    # check 
-    echo -e '\004'
-    # echo -e -e '\033[33m                            введите ctrl + D'
-    newgrp docker
-    '''
 
     program_map = {
         'code': Code,
@@ -175,36 +145,8 @@ class ProgramMap:
         'slack-desktop': Slack,
         'sublime-text': Sublime,
         'viber': Viber,
-        'virtualbox': {
-            'check_version': {
-                'command': 'dpkg -l | grep virtualbox',
-                'func': check_version,
-                'result_indices': [2, 3]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_virtualbox_url()
-            },
-        },
-        'zoom': {
-            'check_version': {
-                'command': 'dpkg -l | grep zoom',
-                'func': check_version,
-                'result_indices': [2, 3]
-            },
-            'install': {
-                'command': dpkg_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': UrlMap.get_zoom_url(),
-            },
-        },
+        'virtualbox': Virtualbox,
+        'zoom': Zoom,
         'telegram': {
             'check_version': {  # TODO find a way
                 'command': 'echo unknown',
@@ -217,7 +159,7 @@ class ProgramMap:
             },
             'download': {
                 'downloadable': True,
-                'url': UrlMap.get_telegram_url(),
+                'url': 'https://telegram.org/dl/desktop/linux'
             },
         },
         'pycharm-professional': {
@@ -250,91 +192,13 @@ class ProgramMap:
                 'url': UrlMap.get_pycharm_community(),
             },
         },
-        'virtualenv': {
-            'check_version': {
-                'command': 'virtualenv --version',
-                'func': check_version,
-                'result_indices': [1],
-            },
-            'install': {
-                'command': apt_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-            },
-        },
-        'python3-pip': {
-            'check_version': {
-                'command': 'pip3 --version',
-                'func': check_version,
-                'result_indices': [1],
-            },
-            'install': {
-                'command': apt_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-            },
-        },
+        'virtualenv': Virtualenv,
+        'python3-pip': Python3Pip,
         'curl': Curl,
-        'docker': {
-            'check_version': {
-                'command': 'docker --version',
-                'func': check_version,
-                'result_indices': [2],
-            },
-            'install': {
-                'command': install_docker_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-            },
-        },
-        'git': {
-            'check_version': {
-                'command': 'git --version',
-                'func': check_version,
-                'result_indices': [2],
-            },
-            'install': {
-                'command': apt_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-            },
-        },
-        'htop': {
-            'check_version': {
-                'command': 'htop -V',
-                'func': check_version,
-                'result_indices': [1],
-            },
-            'install': {
-                'command': apt_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-            },
-        },
-        'xz-utils': {
-            'check_version': {
-                'command': 'xz -V',
-                'func': check_version,
-                'result_indices': [3],
-            },
-            'install': {
-                'command': apt_install_command,
-                'func': install,
-            },
-            'download': {
-                'downloadable': False,
-            },
-        },
+        'docker': Docker,
+        'git': Git,
+        'htop': Htop,
+        'xz-utils': XzUtils,
     }
 
 
@@ -347,21 +211,7 @@ class ProgramState:
 
     def __init__(self, program_name: str):
         program_class = ProgramMap.program_map[program_name]
-        self.program = program_class(program_name)
-
-        # check_version = self.program_map['check_version']
-        # self.result_indices = check_version['result_indices']
-        # self.check_func = check_version['func']
-        # self.check_command = check_version['command']
-        # download = self.program_map['download']
-        #
-        # self.downloadable = download['downloadable']
-        # if self.downloadable:
-        #     self.url = download['url']
-        #
-        # install = self.program_map['install']
-        # self.installer = install['func']
-        # self.install_command = install['command']
+        self.program = program_class()
 
         self.is_need_recheck_install = True
         self.is_need_recheck_download = True

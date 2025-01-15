@@ -1,15 +1,12 @@
 from programs.common import CommonProgram
 
 
-class Curl(CommonProgram):
-    check_version_cmd = 'curl -V'
-    result_indices = [1, 2]
+class Git(CommonProgram):
+    check_version_cmd = 'git --version'
+    result_indices = [2]
     downloadable = False
-    apt_title = 'curl'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    apt_title = 'git'
+    title = 'git'
 
     @property
     def install_cmd(self):

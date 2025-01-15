@@ -6,10 +6,7 @@ class DBeaver(CommonProgram):
     result_indices = [1]
     downloadable = True
     url = 'https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'DBeaver'
 
     @property
     def install_cmd(self):

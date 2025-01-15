@@ -2,15 +2,12 @@ from programs.common import CommonProgram
 
 
 class Insomnia(CommonProgram):
-    # TODO I don't how we handle this check
+    # TODO I don't like how I handle this check
     check_version_cmd = 'dpkg -l | grep insomnia'
     result_indices = [2, 3]
     downloadable = True
     url = 'https://updates.insomnia.rest/downloads/ubuntu/latest?&app=com.insomnia.app&source=website'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'Insomnia'
 
     @property
     def install_cmd(self):

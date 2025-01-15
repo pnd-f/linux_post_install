@@ -6,10 +6,7 @@ class MongodbCompass(CommonProgram):
     result_indices = [2, 3]
     downloadable = True
     url = 'https://downloads.mongodb.com/compass/mongodb-compass_1.41.0_amd64.deb'
-
-    def __init__(self, title: str):
-        self.title = title
-        super().__init__()
+    title = 'MongodbCompass'
 
     @property
     def install_cmd(self):
