@@ -31,7 +31,7 @@ class CommonProgram(ABC):
             if not getattr(self, field):
                 raise NotImplementedError(f"Children class must redefine {field}")
 
-    def check_version(self) -> list[str]:
+    def get_version(self) -> list[str]:
         try:
             result = subprocess.check_output(self.check_version_cmd, shell=True, text=True, stderr=subprocess.PIPE)
         except (subprocess.CalledProcessError, Exception) as e:
@@ -72,12 +72,12 @@ class CommonProgram(ABC):
     @staticmethod
     def finishing_touches():
         commands = '''sudo apt update -y
-    sudo apt upgrade -y
-    # восстановление зависимостей
-    sudo apt install -y -f
-    # удаление лишних пакетов, чистка кеша APT
-    sudo apt autoremove -y
-    sudo apt-get autoclean -y'''
+        sudo apt upgrade -y
+        # repair dependency
+        sudo apt install -y -f
+        # removing unnecessary packages, cleaning the APT cache
+        sudo apt autoremove -y
+        sudo apt-get autoclean -y'''
         try:
             subprocess.run(args=commands, shell=True)
         except Exception as e:

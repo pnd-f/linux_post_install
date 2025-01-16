@@ -4,7 +4,7 @@ import subprocess
 
 from color_menu import Menu, ColorMenu, FStyle
 from program_state import ProgramState
-from settings import APPS_PATH, DEB_LIST, GENERAL_COMMANDS, APT_LIST, ARCHIVE_LIST
+from settings import DOWNLOAD_APPS_PATH, DEB_LIST, GENERAL_COMMANDS, APT_LIST, ARCHIVE_LIST
 
 
 class InstallMenu(Menu):
@@ -26,7 +26,7 @@ class InstallMenu(Menu):
 
     def __init__(self,
                  *,  # wow wow wow polehche
-                 path_with_programs: str = APPS_PATH,
+                 path_with_programs: str = DOWNLOAD_APPS_PATH,
                  apt_list: list['str'] = APT_LIST,
                  show_downloaded: bool = True,
                  show_installed: bool = True,
@@ -37,8 +37,8 @@ class InstallMenu(Menu):
         self.show_installed = show_installed
         self.show_versions = show_versions
 
-        if not os.path.exists(APPS_PATH):
-            os.mkdir(APPS_PATH)
+        if not os.path.exists(DOWNLOAD_APPS_PATH):
+            os.mkdir(DOWNLOAD_APPS_PATH)
 
         self.files = os.listdir(path_with_programs)
 

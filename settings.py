@@ -1,4 +1,6 @@
-APPS_PATH = 'apps'
+##### TODO sudo tar xzf pycharm-*.tar.gz -C /opt/
+DOWNLOAD_APPS_PATH = './apps'
+INSTALL_APPS_PATH = '/opt'
 GENERAL_COMMANDS = ['select all', 'exit']
 DEB_LIST = [
     'code',
