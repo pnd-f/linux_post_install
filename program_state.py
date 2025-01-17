@@ -1,7 +1,3 @@
-import json
-import os
-import subprocess
-
 from programs.apt.git import Git
 from programs.apt.htop import Htop
 from programs.apt.python3pip import Python3Pip
@@ -15,7 +11,6 @@ from programs.dpkg.microsoft_edge import MicrosoftEdge
 from programs.dpkg.mongodb_compass import MongodbCompass
 from programs.dpkg.slack_desktop import Slack
 from programs.dpkg.sublime import Sublime
-from color_menu import FStyle
 from download_with_progres import AnimationDownloader
 from programs.dpkg.viber import Viber
 from programs.dpkg.virtualbox import Virtualbox

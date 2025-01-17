@@ -13,7 +13,7 @@ DEB_LIST = [
     'sublime-text',
     # 'teams',
     # 'viber',
-    # 'virtualbox',
+    'virtualbox',
     # 'zoom',
 ]
 ARCHIVE_LIST = [
