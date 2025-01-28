@@ -3,7 +3,7 @@ import re
 import subprocess
 
 from color_menu import Menu, ColorMenu, FStyle
-from program_state import ProgramState
+from program_state import ProgramWrapper
 from settings import DOWNLOAD_APPS_PATH, DEB_LIST, GENERAL_COMMANDS, APT_LIST, ARCHIVE_LIST
 
 
@@ -13,7 +13,7 @@ class InstallMenu(Menu):
     general_commands: list[str] = GENERAL_COMMANDS
     max_option_len: int = 0
 
-    program_map: dict[str, ProgramState]
+    program_map: dict[str, ProgramWrapper]
 
     # print colors
     downloaded: str
@@ -80,7 +80,7 @@ class InstallMenu(Menu):
         self.program_map = {}
         for _list in args:
             for option in _list:
-                self.program_map[option] = ProgramState(option)
+                self.program_map[option] = ProgramWrapper(option)
 
     def set_max_option_len_from_args(self, *args: str):
         for elem in args:
@@ -168,7 +168,7 @@ class InstallMenu(Menu):
         """
         check is program installed
         """
-        program_state: ProgramState = self.program_map.get(program)
+        program_state: ProgramWrapper = self.program_map.get(program)
         if program_state is not None:
             try:
                 return program_state.version

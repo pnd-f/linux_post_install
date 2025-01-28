@@ -1,5 +1,6 @@
 from programs.apt.git import Git
 from programs.apt.htop import Htop
+from programs.apt.python3 import Python3
 from programs.apt.python3pip import Python3Pip
 from programs.apt.virtualenv import Virtualenv
 from programs.apt.xz_utils import XzUtils
@@ -18,12 +19,10 @@ from programs.dpkg.vscode import Code
 from programs.dpkg.zoom import Zoom
 from programs.others.docker import Docker
 from programs.others.pycharm import PycharmProfessional, PycharmCommunity
+from programs.others.telegram import Telegram
 
 
 class ProgramMap:
-    # TODO remove
-    unpack_telegram_command = 'sudo apt install xz-utils -y && tar -xf apps/{} -C ~/apps'
-
     program_map = {
         'code': Code,
         'dbeaver': DBeaver,
@@ -36,24 +35,11 @@ class ProgramMap:
         'viber': Viber,
         'virtualbox': Virtualbox,
         'zoom': Zoom,
-        'telegram': {
-            'check_version': {  # TODO find a way
-                'command': 'echo unknown',
-                # 'func': check_version,
-                'result_indices': [0],
-            },
-            'install': {
-                'command': unpack_telegram_command,
-                # 'func': install,
-            },
-            'download': {
-                'downloadable': True,
-                'url': 'https://telegram.org/dl/desktop/linux'
-            },
-        },
+        'telegram': Telegram,
         'pycharm-professional': PycharmProfessional,
         'pycharm-community': PycharmCommunity,
         'virtualenv': Virtualenv,
+        'python3': Python3,
         'python3-pip': Python3Pip,
         'curl': Curl,
         'docker': Docker,
@@ -63,7 +49,7 @@ class ProgramMap:
     }
 
 
-class ProgramState:
+class ProgramWrapper:
     __is_downloaded: bool | None = None
     __is_installed: bool | None = None
     __version: str = ''
@@ -113,6 +99,11 @@ class ProgramState:
         self.is_need_recheck_install = True
 
     # TODO add only download and only install -> separately
+    def download(self):
+        pass
+
+    def install(self):
+        pass
 
     @property
     def version(self):
