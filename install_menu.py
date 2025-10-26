@@ -3,8 +3,8 @@ import re
 import subprocess
 
 from color_menu import Menu, ColorMenu, FStyle
-from program import ProgramState, ProgramMap
-from settings import APPS_PATH, DEB_LIST, GENERAL_COMMANDS, APT_LIST, ARCHIVE_LIST
+from program_state import ProgramWrapper
+from settings import DOWNLOAD_APPS_PATH, DEB_LIST, GENERAL_COMMANDS, APT_LIST, ARCHIVE_LIST
 
 
 class InstallMenu(Menu):
@@ -13,7 +13,7 @@ class InstallMenu(Menu):
     general_commands: list[str] = GENERAL_COMMANDS
     max_option_len: int = 0
 
-    program_map: dict[str, ProgramState]
+    program_map: dict[str, ProgramWrapper]
 
     # print colors
     downloaded: str
@@ -26,7 +26,7 @@ class InstallMenu(Menu):
 
     def __init__(self,
                  *,  # wow wow wow polehche
-                 path_with_programs: str = APPS_PATH,
+                 path_with_programs: str = DOWNLOAD_APPS_PATH,
                  apt_list: list['str'] = APT_LIST,
                  show_downloaded: bool = True,
                  show_installed: bool = True,
@@ -37,8 +37,8 @@ class InstallMenu(Menu):
         self.show_installed = show_installed
         self.show_versions = show_versions
 
-        if not os.path.exists(APPS_PATH):
-            os.mkdir(APPS_PATH)
+        if not os.path.exists(DOWNLOAD_APPS_PATH):
+            os.mkdir(DOWNLOAD_APPS_PATH)
 
         self.files = os.listdir(path_with_programs)
 
@@ -80,7 +80,7 @@ class InstallMenu(Menu):
         self.program_map = {}
         for _list in args:
             for option in _list:
-                self.program_map[option] = ProgramState(option)
+                self.program_map[option] = ProgramWrapper(option)
 
     def set_max_option_len_from_args(self, *args: str):
         for elem in args:
@@ -168,7 +168,7 @@ class InstallMenu(Menu):
         """
         check is program installed
         """
-        program_state: ProgramState = self.program_map.get(program)
+        program_state: ProgramWrapper = self.program_map.get(program)
         if program_state is not None:
             try:
                 return program_state.version
@@ -183,7 +183,7 @@ class InstallMenu(Menu):
         return None
 
     def show_selected_programs(self, selected_option_indices: set[int]):
-        print(f'{FStyle.YELLOW}You have selected:{FStyle.GREEN}\n')
+        print(f'{FStyle.YELLOW}You have selected:\n')
         if self.select_all_index in selected_option_indices:
             print(f'{self.menu_options_backup[self.select_all_index]}:\n')
             for index, menu_option in enumerate(self.menu_options_backup):
@@ -204,7 +204,8 @@ class InstallMenu(Menu):
             self.install_program(program_name)
             print(f'{FStyle.YELLOW}Finished with {program_name}{FStyle.RESET_ALL}\n')
 
-        ProgramMap.finishing_touches()
+        # TODO to separate point
+        # CommonProgram.finishing_touches()
 
     def install_program(self, name: str) -> None:
         program = self.program_map.get(name)

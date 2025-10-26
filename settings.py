@@ -1,9 +1,11 @@
-APPS_PATH = 'apps'
+##### TODO sudo tar xzf pycharm-*.tar.gz -C /opt/
+DOWNLOAD_APPS_PATH = './apps'
+INSTALL_APPS_PATH = '/opt'
 GENERAL_COMMANDS = ['select all', 'exit']
 DEB_LIST = [
     'code',
     'dbeaver',
-    'google',
+    'chrome',
     'Insomnia',
     'microsoft-edge',
     'mongodb-compass',
@@ -15,17 +17,17 @@ DEB_LIST = [
     'zoom',
 ]
 ARCHIVE_LIST = [
-    'tsetup',
+    'telegram',
     'pycharm-professional',
     'pycharm-community',
 ]
 APT_LIST = [
-    # 'python3',
+    'python3',
     'virtualenv',
     'python3-pip',
     'curl',
     'docker',
-    'git',
-    'htop',
-    'xz-utils',
+    # 'git',
+    # 'htop',
+    # 'xz-utils',
 ]

@@ -3,8 +3,8 @@ try:
     from install_menu import InstallMenu
 except SyntaxError as e:
     print(e)
-    from python_work_around import check_python_version
-    check_python_version()
+    from python_work_around import check_and_install_python_version
+    check_and_install_python_version()
 
 
 def main():
